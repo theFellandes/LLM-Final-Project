@@ -1,3 +1,5 @@
+#  Working early version, use the other ones.
+
 CALL apoc.periodic.iterate(
   'LOAD CSV WITH HEADERS FROM "file:///18/book100k-200k.csv" AS row RETURN row',
   '
@@ -17,7 +19,7 @@ CALL apoc.periodic.iterate(
 
 ------------------------------------------------------------------------------------------------------------------------
 
-# Düzgün
+# Working one for apoc
 
 CALL apoc.periodic.iterate(
   'LOAD CSV WITH HEADERS FROM "file:///18/book100k-200k.csv" AS row RETURN row',
@@ -39,6 +41,8 @@ RETURN batches, failedBatches, total, timeTaken, committedOperations;
 
 
 ------------------------------------------------------------------------------------------------------------------------
+
+# Working one for apoc
 
 CALL apoc.periodic.iterate(
   'LOAD CSV WITH HEADERS FROM "file:///18/user_rating_0_to_1000.csv" AS row RETURN row',
@@ -71,7 +75,7 @@ RETURN batches, failedBatches, total, timeTaken, committedOperations;
 
 ------------------------------------------------------------------------------------------------------------------------
 
-#  BOZUK
+#  Doesn't work
 
 UNWIND ["book1-100k.csv", "book100k-200k.csv", "book200k-300k.csv", "book300k-400k.csv"] AS filename
 CALL apoc.periodic.iterate(
