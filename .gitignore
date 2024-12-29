@@ -42,7 +42,7 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
-.cache
+scrapper/.cache
 nosetests.xml
 coverage.xml
 *.cover
@@ -161,3 +161,4 @@ cython_debug/
 
 tutorial_notebook.ipynb
 /tutorial_notebook.ipynb
+/.cache/

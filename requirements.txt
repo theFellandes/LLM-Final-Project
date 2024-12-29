@@ -1,0 +1,8 @@
+fastapi~=0.115.6
+kagglehub~=0.3.6
+neo4j~=5.27.0
+python-dotenv~=1.0.1
+pydantic~=2.10.4
+langchain~=0.3.13
+PyYAML~=6.0.2
+pandas~=2.2.3

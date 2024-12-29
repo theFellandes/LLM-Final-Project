@@ -1,0 +1,109 @@
+CALL apoc.periodic.iterate(
+  'LOAD CSV WITH HEADERS FROM "file:///18/book100k-200k.csv" AS row RETURN row',
+  '
+  CALL apoc.do.when(
+    row.Id IS NULL OR row.Authors IS NULL,
+    "RETURN null",
+    "
+    MERGE (b:Book {id: toInteger(row.Id)})
+    SET b.name = row.Name, b.language = row.Language, b.publisher = row.Publisher
+    MERGE (a:Author {name: row.Authors})
+    MERGE (b)-[:WRITTEN_BY]->(a)
+    ", {row: row})
+  YIELD value RETURN value
+  ',
+  {batchSize: 1000, parallel: true}
+);
+
+------------------------------------------------------------------------------------------------------------------------
+
+# Düzgün
+
+CALL apoc.periodic.iterate(
+  'LOAD CSV WITH HEADERS FROM "file:///18/book100k-200k.csv" AS row RETURN row',
+  '
+  CALL apoc.do.when(
+    row.Id IS NULL OR row.Authors IS NULL,
+    "RETURN null",
+    "
+    MERGE (b:Book {id: toInteger(row.Id)})
+    SET b.name = row.Name, b.language = row.Language, b.publisher = row.Publisher, b.publishMonth = row.PublishMonth, b.rating = row.Rating, b.ISBN = row.ISBN
+    MERGE (a:Author {name: row.Authors})
+    MERGE (b)-[:WRITTEN_BY]->(a)
+    ", {row: row})
+  YIELD value RETURN value
+  ',
+  {batchSize: 500, parallel: true, retries: 5}
+) YIELD batches, failedBatches, total, timeTaken, committedOperations
+RETURN batches, failedBatches, total, timeTaken, committedOperations;
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+CALL apoc.periodic.iterate(
+  'LOAD CSV WITH HEADERS FROM "file:///18/user_rating_0_to_1000.csv" AS row RETURN row',
+  '
+  CALL apoc.do.when(
+    row.ID IS NULL OR row.Name IS NULL OR row.Rating IS NULL,
+    "RETURN null",
+    "
+    MERGE (b:Book {id: toInteger(row.ID)})
+    ON CREATE SET b.name = row.Name
+
+    MERGE (u:User {id: toInteger(row.ID)})
+    ON CREATE SET u.name = \"user_\" + toString(row.ID),
+                  u.created_at = timestamp()
+
+    MERGE (u)-[r:REVIEWED_BY]->(b)
+    ON CREATE SET r.rating = row.Rating,
+                  r.review = row.Rating,
+                  r.created_at = timestamp()
+    ", {row: row})
+  YIELD value RETURN value
+  ',
+  {batchSize: 500, parallel: true, retries: 5}
+) YIELD batches, failedBatches, total, timeTaken, committedOperations
+RETURN batches, failedBatches, total, timeTaken, committedOperations;
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+#  BOZUK
+
+UNWIND ["book1-100k.csv", "book100k-200k.csv", "book200k-300k.csv", "book300k-400k.csv"] AS filename
+CALL apoc.periodic.iterate(
+  'LOAD CSV WITH HEADERS FROM "file:///18/" + filename + " AS row RETURN row',
+  '
+  CALL apoc.do.when(
+    row.Id IS NULL OR row.Authors IS NULL,
+    "RETURN null",
+    "
+    MERGE (b:Book {id: toInteger(row.Id)})
+    ON CREATE SET
+      b.name = row.Name,
+      b.language = row.Language,
+      b.publisher = row.Publisher,
+      b.publishMonth = row.PublishMonth,
+      b.rating = row.Rating,
+      b.ISBN = row.ISBN
+    ON MATCH SET
+      b.name = coalesce(row.Name, b.name),
+      b.language = coalesce(row.Language, b.language),
+      b.publisher = coalesce(row.Publisher, b.publisher),
+      b.publishMonth = coalesce(row.PublishMonth, b.publishMonth),
+      b.rating = coalesce(row.Rating, b.rating),
+      b.ISBN = coalesce(row.ISBN, b.ISBN)
+
+    MERGE (a:Author {name: row.Authors})
+    MERGE (b)-[:WRITTEN_BY]->(a)
+    ", {row: row})
+  YIELD value RETURN value
+  ',
+  {batchSize: 500, parallel: true}
+)
+YIELD batches, failedBatches, total, timeTaken, committedOperations
+RETURN filename, batches, failedBatches, total, timeTaken, committedOperations;
+
