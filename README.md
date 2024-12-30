@@ -26,15 +26,23 @@ docker-compose up -d
 ```bash
 python -m venv venv
 ```
-5. Install the required python packages
+5. Activate the venv environment for Linux
+```bash
+source venv/bin/activate
+```
+5. Activate the venv environment for Windows
+```bash
+venv\Scripts\activate.bat
+```
+6. Install the required python packages
 ```bash
 pip install -r requirements.txt
 ```
-6. Install the kaggle dataset either by manually or using the /scrapper/kagglehub.py script. Installing kaggle dataset by hand is advised because the scrapper/data_scrapper.py will start to print out bunch of objects after downloading.
+7. Install the kaggle dataset either by manually or using the /scrapper/kagglehub.py script. Installing kaggle dataset by hand is advised because the scrapper/data_scrapper.py will start to print out bunch of objects after downloading.
 ```bash
 python scrapper/data_scrapper.py
 ```
-7. If you manually install the Kaggle dataset, move the dataset named under .cache file to project root folder
+8. If you manually install the Kaggle dataset, move the dataset named under .cache file to project root folder
 
 ## Usage
 To create the knowledge graph, run the following command:
