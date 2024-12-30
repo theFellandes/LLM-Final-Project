@@ -158,6 +158,8 @@ python internal/graph/llm/llm_similarity_langchain.py -> This script will start 
 
 ``README.md`` - The file that contains the information about the project.
 
+``deliverables`` - The folder that contains the presentation given for this project and the report written for the project.
+
 ## Results & Challenges
 
 The project was hard at the creating the knowledge graph part. Because it took too much time to store the data onto Neo4j. Many methods were tested in this stage of the project, the data processing part. One of the tried method was running csv through a Python script and then insert it into Neo4j. 
