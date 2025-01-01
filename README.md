@@ -213,6 +213,14 @@ Also in this version, the sentiment analysis was performed using OpenAI and BART
 
 ![img_6.png](md-resources/img_6.png)
 
+Utilizing the similarity analysis, the following time took to generate it:
+
+![img_7.png](md-resources/img_7.png)
+
+Therefore, using 1000 random books to perform similarity analysis was done. This similarity was done using OpenAI.
+
+![img_8.png](md-resources/img_8.png)
+
 ## Authors
 - [Oğuzhan Güngör](https://github.com/theFellandes/)
 
