@@ -1,0 +1,26 @@
+# Returns all relationships of type HAS_AWARDS, REVIEWED_BY, and HAS_GENRE limited to 25 each
+MATCH p1=()-[r1:HAS_AWARDS]->()
+RETURN p1 AS path
+LIMIT 25
+UNION
+MATCH p2=()-[r2:REVIEWED_BY]->()
+RETURN p2 AS path
+LIMIT 25
+UNION
+MATCH p3=()-[r3:HAS_GENRE]->()
+RETURN p3 AS path
+LIMIT 25
+
+############################################################################################
+
+# Returns descriptions which was added from the DBpedia dataset
+MATCH (n) WHERE (n.description) IS NOT NULL
+RETURN DISTINCT "node" as entity, n.description AS description LIMIT 25
+UNION ALL
+MATCH ()-[r]-() WHERE (r.description) IS NOT NULL
+RETURN DISTINCT "relationship" AS entity, r.description AS description LIMIT 25
+
+############################################################################################
+
+# Returns all genres which was added from the DBpedia dataset
+MATCH p=()-[r:HAS_GENRE]->() RETURN p LIMIT 25
